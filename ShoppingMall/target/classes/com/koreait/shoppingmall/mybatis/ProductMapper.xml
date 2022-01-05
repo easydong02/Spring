@@ -2,35 +2,57 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="Product">
 
-<select id="selectAll" resultType="Product">
-
-	select * from product
-</select>
-
-<select id="select" parameterType="int" resultType="Product">
-	select * from product where product_id=#{product_id}
-</select>
-
-<insert id="insert" parameterType="Product">
-	insert into product(category_id,product_name,price,introduce,detail)
-	values(#{category_id},#{product_name},#{price},#{introduce},#{detail})
+	<!-- 자동매핑이 아닌, 개발자의 임의적 매핑을 시도할때 사용하는 태그 -->
+	<resultMap type="Product" id="JoinCategoryProduct">
+		<id column="product_id" 				property="product_id"/>
+		<result column="product_name" 	property="product_name"/>	
+		<result column="price" 				property="price"/>	
+		<result column="introduce" 			property="introduce"/>	
+		<result column="detail" 				property="detail"/>	
+		<!-- 이미 CategoryMapper에서 카테고리 한건을 담는 기능의 구현되어 있으므로, 기존의 매퍼들을 최대한 활용해 보자  -->
+		<association column="category_id"  property="category" javaType="Category" select="Category.select"/>			
+	</resultMap>
 	
-	<selectKey keyColumn="product_id" order="AFTER" resultType="int" keyProperty="product_id">
-	<!-- select seq_product.curval as product_id from dual -->
-		select last_insert_id() as product_id 
-	</selectKey>
+	<sql id="selectAllCommon">
+		select product_id, product_name, price, introduce, detail,
+		c.category_id as category_id, category_name, team, step, depth 
+		from category c, product p
+		where c.category_id=p.category_id
+	</sql>
+	
+	<select id="selectAll" resultMap="JoinCategoryProduct">
+		<!-- Product 의 멤버변수 중 Category 관련된 멤버변수는 category_id가 아니기 때문에, 아래의 컬럼명과   Product DTO의  
+		자동 매핑이 이루어질 수 없다.. 해결책? 자동이 안되므로, 수동으로 해결해야 함 -->
+		<include refid="selectAllCommon"/>
+	</select>
+	
+	<select id="selectAllByCategory" parameterType="int">
+		<include refid="selectAllCommon"/>
+		and p.category_id =#{category_id}	
+	</select>
 
-</insert>
+	<select id="select" parameterType="int" resultType="Product">
+		select * from product where product_id=#{product_id}
+	</select>
 
-<update id="update">
-
-	update product set category_id=#{category_id},product_name=#{product_name},price=#{price},
-	introduce=#{introduce},detail=#{detail}
-	where product_id=#{product_id}
-</update>
-
-<delete id="delete">
-	delete from product where product_id=#{product_id}
-</delete>
-
+	<insert id="insert" parameterType="Product">
+		insert into product(category_id,product_name,	price,introduce,detail)
+		values(#{category.category_id}, #{product_name}, #{price}, #{introduce}, #{detail})
+		
+		<selectKey keyColumn="product_id" order="AFTER" resultType="int" keyProperty="product_id">
+			<!-- select seq_product.currval as product_id from dual -->
+			select last_insert_id() as product_id 
+		</selectKey>
+	</insert>
+	
+	<update id="update" parameterType="Product">
+		update product set category_id=#{category.category_id}, product_name=#{product_name}, price=#{price}
+		, introduce=#{introduce}, detail=#{detail} 
+		where product_id=#{product_id}
+	</update>
+	
+	<delete id="delete" parameterType="int">
+		delete from product where product_id=#{product_id}
+	</delete>	
+	
 </mapper>

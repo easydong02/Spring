@@ -4,9 +4,11 @@
 	xmlns:beans="http://www.springframework.org/schema/beans"
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:aop="http://www.springframework.org/schema/aop"
 	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
-		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd">
+		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.3.xsd">
 
 	<!-- DispatcherServlet Context: defines this servlet's request-processing infrastructure -->
 	
@@ -23,10 +25,25 @@
 	</beans:bean>
 	
 	
+	
+	
 	<!-- 아래의 컴포넌트 스캔에 의해, 지정된 패키지에 존재하는 모든 객체는 @Componenet 등등.. 
 	메모리에 올라갈 대상이 된다..
 	-->
 	<context:component-scan base-package="com.koreait.shoppingmall.controller.shop" />
+	
+	
+	<!-- aop 설정 -->
+	<beans:bean class="com.koreait.shoppingmall.aop.ShopMenuAspect" id="shopMenuAspect"/>
+	
+	<aop:config>
+		<aop:aspect id="categoryAspect" ref="shopMenuAspect">
+			<!-- aspect가 관여될 수 있는 후보지점들을 가리켜 joinpoint라 하고, 이 joinpoint 중 결정된 joinpoint를 가리켜
+			pointcut이라 한다.	 -->
+			<aop:pointcut expression="execution(public * com.koreait.shoppingmall.controller.shop..*(..))" id="categoryCut"/>
+			<aop:around method="getCategoryList" pointcut-ref="categoryCut"/>
+		</aop:aspect>
+	</aop:config>
 	
 	<!-- 아파치 파일 업로드 빈 추가-->
 	<beans:bean class="org.springframework.web.multipart.commons.CommonsMultipartResolver" 

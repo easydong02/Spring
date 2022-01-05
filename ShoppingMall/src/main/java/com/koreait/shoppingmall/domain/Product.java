@@ -9,7 +9,7 @@ import lombok.Data;
 @Data
 public class Product {
 	private int product_id;
-	private int category_id;
+	private Category category;
 	private String product_name;
 	private int price;
 	private String introduce;

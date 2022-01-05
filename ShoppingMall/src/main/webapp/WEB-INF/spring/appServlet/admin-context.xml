@@ -30,5 +30,6 @@
 	p:maxUploadSize="1048576"></beans:bean>
 	
 	<beans:bean class="com.koreait.shoppingmall.util.FileManager" id="fileManager"/>
+	<beans:bean class="com.koreait.shoppingmall.util.Pager" id="pager"/>
 	
 </beans:beans>

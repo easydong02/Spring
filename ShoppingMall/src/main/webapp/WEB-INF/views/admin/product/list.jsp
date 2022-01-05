@@ -1,4 +1,11 @@
-<%@ page contentType="text/html;charset=UTF-8"%>
+<%@page import="com.koreait.shoppingmall.util.Pager"%>
+<%@page import="com.koreait.shoppingmall.domain.Product"%>
+<%@page import="java.util.List"%>
+<%@ page contentType="text/html; charset=UTF-8"%>
+<%
+	List<Product> productList = (List)request.getAttribute("productList");//상품목록
+	Pager pager = (Pager)request.getAttribute("pager"); //페이징 처리객체
+%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,7 +13,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Dashboard</title>
 	
-	<%@ include file="../../inc/top_link.jsp" %>
+	<%@ include file="../../inc/head_link.jsp" %>
 
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
@@ -72,23 +79,25 @@
                   <thead>
                     <tr>
                       <th>No</th>
-                      <th>카테고리</th>
                       <th>상품명</th>
                       <th>가격</th>
                     </tr>
                   </thead>
                   <tbody>
-                    <%for(int i=1;i<=10;i++){ %>
+                  	<%int curPos=pager.getCurPos(); %>
+                  	<%int num=pager.getNum(); %>
+                    <%for(int i=1;i<=pager.getPageSize() ;i++){ %>
+                    <%if(num<1)break;%>
+                    <%Product product = productList.get(curPos++); %>
                     <tr>
-                      <td>183</td>
-                      <td>John Doe</td>
-                      <td>11-7-2014</td>
-                      <td><span class="tag tag-success">Approved</span></td>
+                      <td><%=num--%></td>
+                      <td><%=product.getProduct_name() %></td>
+                      <td><%=product.getPrice() %></td>
                     </tr>
                     <%} %>
                     <tr>
                     	<td colspan="4">
-                    		<button type="button" class="btn btn-info" onClick="location.href='/admin/product/registForm';">상품등록</button>
+                    		<button type="button" class="btn btn-info" onClick="location.href='/admin/product/registform';">상품등록</button>
                     	</td>
                     </tr>
                   </tbody>

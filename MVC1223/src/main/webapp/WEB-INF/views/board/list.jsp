@@ -1,5 +1,5 @@
 <%@page import="com.koreait.mvc1223.domain.Board"%>
-<%@page import="com.koreait.shoppingmall.util.Pager"%>
+<%@page import="com.koreait.funfume.util.Pager"%>
 <%@page import="java.util.List"%>
 <%@ page contentType="text/html;charset=UTF-8"%>
 

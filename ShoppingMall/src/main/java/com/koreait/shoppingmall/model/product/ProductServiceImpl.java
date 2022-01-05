@@ -20,12 +20,12 @@ public class ProductServiceImpl implements ProductService {
 
 	@Override
 	public List selectAll() {
-		return null;
+		return productDAO.selectAll();
 	}
 
 	@Override
 	public Product select(int product_id) {
-		return null;
+		return productDAO.select(product_id);
 	}
 
 	//적어도 상품 등록이란? product + product_img + 이미지업로드
@@ -44,11 +44,18 @@ public class ProductServiceImpl implements ProductService {
 	}
 
 	@Override
-	public void update(Product product) {
+	public void update(Product product) throws ProductException {
+		productDAO.update(product);
 	}
 
 	@Override
-	public void delete(int product_id) {
+	public void delete(int product_id) throws ProductException{
+		productDAO.delete(product_id);
+	}
+
+	@Override
+	public List selectAllByCategory(int category_id) {
+		return productDAO.selectAllByCategory(category_id);
 	}
 
 }

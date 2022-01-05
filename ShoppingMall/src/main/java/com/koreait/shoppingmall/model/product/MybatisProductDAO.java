@@ -25,12 +25,12 @@ public class MybatisProductDAO implements ProductDAO {
 
 	@Override
 	public List selectAll() {
-		return null;
+		return sessionTemplate.selectList("Product.selectAll");
 	}
 
 	@Override
 	public Product select(int product_id) {
-		return null;
+		return sessionTemplate.selectOne("Product.select",product_id);
 	}
 
 	@Override
@@ -42,11 +42,24 @@ public class MybatisProductDAO implements ProductDAO {
 	}
 
 	@Override
-	public void update(Product product) {
+	public void update(Product product)throws ProductException {
+		int result = sessionTemplate.update("Product.update",product);
+		if(result==0) {
+			throw new ProductException("상품 수정 실패");
+		}
 	}
 
 	@Override
-	public void delete(int product_id) {
+	public void delete(int product_id) throws ProductException{
+		int result = sessionTemplate.delete("Product.delete",product_id);
+		if(result==0) {
+			throw new ProductException("상품 삭제 실패");
+		}
+	}
+
+	@Override
+	public List selectAllByCategory(int category_id) {
+		return sessionTemplate.selectList("Product.selectAllByCategory",category_id);
 	}
 
 }

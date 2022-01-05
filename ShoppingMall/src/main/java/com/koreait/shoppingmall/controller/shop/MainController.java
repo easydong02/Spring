@@ -19,7 +19,7 @@ public class MainController {
 	@Autowired
 	private ProductService productService;
 	
-	@RequestMapping(value="/main", method=RequestMethod.GET)
+	@RequestMapping(value="/", method=RequestMethod.GET)
 	public ModelAndView getMain() {
 		
 		ModelAndView mav = new ModelAndView();

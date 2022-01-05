@@ -1,12 +1,13 @@
+<%@ page contentType="text/html; charset=UTF-8"%>
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>AdminLTE 3 | Dashboard</title>
-  
-  <%@ include file="../inc/top_link.jsp" %>
-  
+	
+	<%@ include file="../inc/head_link.jsp" %>
+
 </head>
 <body class="hold-transition sidebar-mini layout-fixed">
 <div class="wrapper">
@@ -21,7 +22,7 @@
   <!-- /.navbar -->
 
   <!-- Main Sidebar Container -->
-  <%@ include file="../inc/sidebar.jsp" %>
+  <%@ include file="../inc/sidebar.jsp" %>  
 
   <!-- Content Wrapper. Contains page content -->
   <div class="content-wrapper">
@@ -628,7 +629,9 @@
     <!-- /.content -->
   </div>
   <!-- /.content-wrapper -->
-<%@ include file="../inc/footer.jsp" %>
+  
+  <%@ include file="../inc/footer.jsp" %>  
+  
 
   <!-- Control Sidebar -->
   <aside class="control-sidebar control-sidebar-dark">
